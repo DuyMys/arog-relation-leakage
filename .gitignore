@@ -1,0 +1,15 @@
+# Secrets and labels: never publish
+*_PRIVATE*
+**/data_private/
+**/split_manifest.csv
+protocolA_test_outputs.zip
+
+# Duplicates
+**/outputs_test/
+
+# Local environment and logs
+ARoG/
+ollama.log
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

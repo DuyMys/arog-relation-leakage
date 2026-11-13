@@ -1,0 +1,7 @@
+job,contrast,n,diff,ci_lo,ci_hi,p_mcnemar,p_holm
+transcript,L0-L1,60,-0.05,-0.15,0.05,0.5078125,1.0
+transcript,L1-L2,60,0.05,-0.05,0.15,0.5078125,1.0
+transcript,L0-L2,60,0.0,-0.1,0.1,1.0,1.0
+transcript,L0-C0 (attack advantage),60,-0.05,-0.15,0.05,0.548828125,
+transcript,L1-C0 (attack advantage),60,0.0,-0.1,0.1,1.0,
+transcript,L2-C0 (attack advantage),60,-0.05,-0.13333333333333333,0.03333333333333333,0.453125,

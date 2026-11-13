@@ -1,0 +1,26 @@
+# T04 v1.0 — OUTBOUND KGQA DIRECT-DISCLOSURE GUARD
+# Format: LITERAL<TAB>value or REGEX<TAB>pattern. Match is case-insensitive.
+# Scope: candidate REMOTE-FACING KGQA messages (not attacker evaluation prompts).
+# No private UUID, cryptographic key, labels-by-patient, or other secrets below.
+# Literal disease labels, synonyms and SNOMED codes: six public target classes A–F.
+LITERAL	Type 2 diabetes mellitus
+LITERAL	Type II diabetes mellitus
+LITERAL	Type 2 diabetes
+LITERAL	T2D
+LITERAL	Childhood asthma
+LITERAL	asthma
+LITERAL	Appendicitis
+LITERAL	Seizure disorder
+LITERAL	Hyperlipidemia
+LITERAL	Hypercholesterolemia
+LITERAL	Colon polyp
+LITERAL	Colonic polyp
+LITERAL	44054006
+LITERAL	233678006
+LITERAL	74400008
+LITERAL	128613002
+LITERAL	55822004
+LITERAL	68496003
+# Exact full UUIDs, and structured fields revealing private labels/identifiers.
+REGEX	\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b
+REGEX	\b(?:patient_id|patient_uuid|raw_uuid|target_code|disease_code|diagnosis_code|snomed_code|class_key|class_id|disease_label)\s*[\"']?\s*[:=]

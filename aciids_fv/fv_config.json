@@ -1,0 +1,15 @@
+{
+  "base_dir": "ACIIDS_2027",
+  "kg_dir": "ACIIDS_T01/data_private/raw/kg_v0.1/kg",
+  "clean_dir": "ACIIDS_T01/data_private/raw/kg_v0.1/data/clean",
+  "secret_file": "ACIIDS_T01/data_private/raw/kg_v0.1/configs/id_key_PRIVATE.hex",
+  "mapping_file": "ACIIDS_T05_v2_1/data_private/relation_mapping_v2_1_CANDIDATE_PRIVATE.csv",
+  "mapping_sha256": "a5402d04ca3ef98ea82b5000454a7122dee887a455475e4d48f2712b45e9bdf9",
+  "split_manifest": "ACIIDS_T02/configs/split_manifest.csv",
+  "banned_tokens": "ACIIDS_T04/configs/banned_tokens.txt",
+  "edges_per_modality": 15,
+  "primary_policy": "topcount15",
+  "sensitivity_policy": "random15",
+  "attacker": {"temperature": 0, "num_ctx": 16384, "seed": 20261107, "retry_on_parse_error": 1},
+  "gates": {"c_plus_min_dev_accuracy": 0.90}
+}
