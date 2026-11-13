@@ -10,7 +10,7 @@ Test set: 120 patients (20 per class, 6 classes, chance = 16.7%), each queried a
 
 | Attacker | Input | L0 | L1 | L2 |
 | --- | --- | --- | --- | --- |
-| A3 logistic regression (primary endpoint) | relation-label set parsed from the ARoG prompts | 71.7% [63.0, 79.0] | 65.0% [56.1, 73.0] | 16.7% [11.1, 24.4] |
+| A3 logistic regression (primary endpoint) | relation-label set parsed from the ARoG prompts | 71.7% [63.0, 79.0] | 65.0% [56.1, 72.9] | 16.7% [11.1, 24.4] |
 | A1 Qwen2.5-7B, zero-shot | extracted relation-label list | 38.3% | 32.5% | 12.5% |
 | A1 Qwen2.5-7B, zero-shot | full raw prompts | 20.8% | 15.0% | 16.7% |
 | Local control (not visible remotely) | node degree + birth year, full graph | 36.7% | 36.7% | 36.7% |
@@ -44,7 +44,7 @@ The repository root mirrors `/kaggle/working` of the test run, so paths in the n
 4. `make_prereg.py` wrote `PREREG_LOCK.json` at 2026-11-10 16:22:20 UTC. SHA-256 of the lock file: `52a23cac6d97593e05e5481cde9dd22342b0316248c892404108eb117796c62c`.
 5. The test data was built and ARoG was run once over 360 records (3 chunks). Every script that reads the test split re-checks the lock hashes.
 
-Deviations recorded in the lock before the test run: the primary endpoint was moved from the zero-shot LLM attacker (A1) to the statistical attacker (A3) after dev results; the `xtract` attacker job was added after dev; the test split had been partly exposed in an earlier exploratory pilot.
+Deviations recorded in the lock before the test run: the primary endpoint was moved from the zero-shot LLM attacker (A1) to the statistical attacker (A3) after dev results; the `xtract` attacker job was added after dev; the test split had been partly exposed: before the splits were drawn, disease labels and class-level statistics of the full source cohort, including later test patients, were examined during KG construction. No attacker had been run on test patients.
 
 Two known issues after the lock. The stage-ablation evaluation failed inside the notebook (`$PREREG` is not expanded inside a Python `for` loop in IPython) and was rerun separately; its outputs are `testA/metrics_abl_*.csv`. `evaluate.py` compares every level against the C0 control of a single level; same-level comparisons are in `posthoc/c0_same_level.csv` and do not change any conclusion.
 
