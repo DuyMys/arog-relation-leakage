@@ -1,0 +1,69 @@
+{
+  "locked_utc": "2026-11-10T16:22:20.914683Z",
+  "root": "/kaggle/working/ACIIDS_2027",
+  "attacker_models": [
+    "qwen2.5:7b-instruct"
+  ],
+  "system_prompt_sha256": "b7d6a828becdef93bef3841ad3fcb729feb712839e70cb0ef0bdb080d1cdab87",
+  "plan": {
+    "design": "Protocol A: the UNMODIFIED ARoG pipeline (NLPGM/ARoG, patched only to log prompts and set num_ctx=16384, seed) runs on the projected Synthea KG with Qwen2.5-7B-instruct; every outbound LLM prompt is logged; attackers read the log.",
+    "test_sample": "first 20 patients per class by sorted patient_mid of the TEST split (120 patients x L0,L1,L2 = 360 ARoG records); make_arog_data.py --limit_patients 120. Chosen before test, from time budget (~31 s/record on dev).",
+    "primary_endpoint": "A3_logreg (trained on TRAIN views only) accuracy on the relation-label SET parsed from relation_search_prune prompts of the real ARoG log, at L0 and L1: one-sided exact binomial vs chance 1/6, Holm over {L0, L1}; plus label-permutation control C-. L2 reported as expected null.",
+    "primary_note": "DEVIATION DISCLOSED: the original proposal named the zero-shot LLM attacker (A1) as primary; after dev (A1 on raw transcript ~ chance; A3 70-80% on L0/L1) A3 was made primary. A1 variants are secondary.",
+    "secondary": [
+      "A3_centroid",
+      "A1 raw transcript (job transcript)",
+      "A1 extracted label list (xtract; ADDED AFTER observing dev A1-raw)",
+      "A1 on fixed views (Protocol B) for the same patients",
+      "controls c0, c2tok, xtract_c2tok",
+      "paired L0-L1, L1-L2, L0-L2 (McNemar, Holm)",
+      "attack advantage vs C0",
+      "stage ablations (--stages relation_search_prune ; relation_search_prune,entity_annotation_all,reasoning)",
+      "A3 on fixed views of ALL 240 test patients (labelled as supplementary, not ARoG traffic)",
+      "audit: fraction of test records whose transcript label set == fixed-view label set"
+    ],
+    "attackers_tried_on_dev": [
+      "A1 zero-shot Qwen2.5-7B on raw transcript",
+      "A1 on extracted labels (xtract)",
+      "A1 on fixed views",
+      "A3 centroid / logreg on counts (fixed views)",
+      "A3 centroid / logreg on label presence (transcripts)"
+    ],
+    "controls_gate": "C+ accuracy on DEV >= 0.90 and parse rate >= 0.95 before any test run (met on dev: C+ L1 = 1.000, parse 1.0)",
+    "counting": "unparsable answer = wrong; parse rate reported; transcripts truncated at 40000 chars are counted and reported",
+    "claim_rule": "'ARoG leaks' may be written only if the primary endpoint rejects chance at L0 or L1 after Holm; wording must be scoped to this setup (Synthea, 6-class closed world, Qwen2.5-7B, ARoG as released, v2.1 relation mapping); never 'first' or 'general'.",
+    "threat_model": "honest-but-curious remote party sees all outbound prompts (stage=ALL, conservative); stage ablations reported",
+    "no_changes_after_freeze": true,
+    "disclosure": "test split is not prospectively pristine (D2 exploratory exposure); dev/train used for design only; relation mapping v2.1 is operational, not clinically validated; Synthea module structure makes labels informative by construction"
+  },
+  "artifact_sha256": {
+    "__code__/fvlib.py": "0da97710d420137d72756b097633b2b4b19b779ac25123959526914f438219e2",
+    "__code__/build_views.py": "78f03df856ba24c23493705abb2da52bf4a869495be2ea17b3e4b3d51a66782f",
+    "__code__/run_attack.py": "fa3821ab1e896e04baed45cacfb54eeb5e59b9938880e8239329c69401d05294",
+    "__code__/evaluate.py": "cf0198561fb178cdeb551f8be26eff496956a37a67fae16850c1e64b69283304",
+    "__code__/stat_attackers.py": "16993d79e919c7d4d863c1199aed1d645bd26cb246c00b4331d94a1031d477ab",
+    "__code__/fv_config.json": "f6aba65374f110480e9d52acebb322020cd269d4a5c72ef5e6bcf36cd5342e64",
+    "__code__/protoA/make_arog_data.py": "0ab752a425b44e7c2b7078cfa3ead287d1b0ad559a4adc8354115e22559263e0",
+    "__code__/protoA/patch_arog.py": "111e9d637f4b5c6286802fb024842a35e2138d50c87763c3c17970c4eb394576",
+    "__code__/protoA/run_transcript_attack.py": "77e77ceb9aa27dea7f819711260603ec52850a435c69b36824550bfe84050228",
+    "__code__/protoA/stat_on_transcripts.py": "0269008d29ccb735e17e4c6a6b5d5279c456afccd2f9a1d8c28c4185ff93a047",
+    "ACIIDS_T05_v2_1/data_private/relation_mapping_v2_1_CANDIDATE_PRIVATE.csv": "a5402d04ca3ef98ea82b5000454a7122dee887a455475e4d48f2712b45e9bdf9",
+    "ACIIDS_T02/configs/split_manifest.csv": "d3482efaf03cb4fdeddc2c7b4d6e2702e21374203da4fa363926f198df723ac3",
+    "ACIIDS_T04/configs/banned_tokens.txt": "4f399da7f61863945f58b9da7339df4156bdd4b4d9668fbdc58bf98437013911",
+    "__dev__/out/dev_protocolA/FilterFreebase": "c5e0eddc0111b489fe1bcb0e00405688c9b4fda5d28b0d1f8c3debd3820d5de8",
+    "__dev__/out/dev_protocolA/README.txt": "dee35b8608950f33fb4dd1e8afc20896763d8cf9080c259c5dbe52362f66b33d",
+    "__dev__/out/dev_protocolA/WebQSP.json": "d4ca1f21c0336421f983ddf1624f7baf24bb1307e60ab2b95975118b89d4a25a",
+    "__dev__/out/dev_protocolA/arog_transcripts_dev.jsonl": "3df5182d3c4c36c60236627d8e1df34d78830d143c45e35a848e23dd4295c75f",
+    "__dev__/out/dev_protocolA/dev_pred_qwen_fixed.jsonl": "55fae88bbf95aa49967f4c458352956b21b7103c0ae57f621d888a73d6ae2d3e",
+    "__dev__/out/dev_protocolA/metrics.csv": "4b050dbfc5e64750f7f5b74bc5e6a7f6403800bb3eeb5b8c3dda7181e73faba9",
+    "__dev__/out/dev_protocolA/metrics_fixed.csv": "d405e3af5103f6c2eea59cae46f35d97d5df510538bb7c81fe5fc3130cdf59f0",
+    "__dev__/out/dev_protocolA/metrics_fixed_paired.csv": "5c9c7b70d67d0889086d81e28575c8bf19063cd67aef322297e9363678bc3d43",
+    "__dev__/out/dev_protocolA/metrics_paired.csv": "90cba44c436d4a9e6034f03c2fcbf040420a74cd7fa89953979300b527c76bf0",
+    "__dev__/out/dev_protocolA/metrics_xtract.csv": "e4b960053b1ed10605e7d2b10acdb7ecac35216df374bb132449afb7cbb144f0",
+    "__dev__/out/dev_protocolA/metrics_xtract_paired.csv": "8f57589f0314bb26dbd92bb2422556de63fe7e3287b8b8e885ad04a7ce62f823",
+    "__dev__/out/dev_protocolA/pred_qwen.jsonl": "de03c47b7a736d950ce97daa65b954071d271cf1642fde01d63accc15ab3a59e",
+    "__dev__/out/dev_protocolA/pred_qwen_xtract.jsonl": "ed21377b166e684d5208dfb57817094b9106d99bba30fc00b201fed681cb9150",
+    "__dev__/out/dev_protocolA/stat_transcripts.csv": "c68fbc35d4fc02b949d6f92967f462016a4b922c33a389f012432f8e5b38902a"
+  },
+  "code_dir": "/kaggle/working/aciids_fv"
+}
